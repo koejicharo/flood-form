@@ -536,7 +536,8 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
         <div class="sig-title">สำเนาถูกต้อง</div>
         <div class="sig-name-line">
           <span class="lbl">ลงชื่อ</span>
-          <span class="sig-dotline"></span>
+          <input class="di" id="sig1rank" type="text" placeholder="ยศ" style="max-width:70px;text-align:center;">
+          <span class="sig-dotline" style="flex:1;min-width:60px;"></span>
         </div>
         <div class="sig-paren-line">
           <span>(</span>
@@ -571,7 +572,8 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
         <div class="sig-title">สำเนาถูกต้อง</div>
         <div class="sig-name-line">
           <span class="lbl">ลงชื่อ</span>
-          <span class="sig-dotline"></span>
+          <input class="di" id="sig2rank" type="text" placeholder="ยศ" style="max-width:70px;text-align:center;">
+          <span class="sig-dotline" style="flex:1;min-width:60px;"></span>
         </div>
         <div class="sig-paren-line">
           <span>(</span>
@@ -593,10 +595,12 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     <div class="sec-label">๓. รายงานความเสียหายที่เกิดจากสถานการณ์อุทกภัยของข้าราชการตำรวจ</div>
 
     <div class="irow">
-      <span class="lbl">ก) ยศ ชื่อ – สกุล</span>
-      <input class="di" id="fullname" type="text" placeholder="ยศ ชื่อ – สกุล เช่น พ.ต.ท.ชัยโรจน์ ทวีกายุจันทร์">
+      <span class="lbl">ก) ยศ</span>
+      <input class="di" id="rank-field" type="text" placeholder="เช่น พ.ต.ท." style="max-width:80px;">
+      <span class="lbl" style="margin-left:8px;">ชื่อ – สกุล</span>
+      <input class="di" id="fullname" type="text" placeholder="เช่น ชัยโรจน์ ทวีกายุจันทร์">
       <span class="lbl" style="margin-left:10px;">ตำแหน่ง</span>
-      <input class="di" id="position" type="text" placeholder="เช่น สว." style="max-width:110px;">
+      <input class="di" id="position" type="text" placeholder="เช่น สว." style="max-width:90px;">
       <span class="lbl" style="margin-left:10px;">สังกัด</span>
       <input class="di" id="affiliation" type="text" placeholder="เช่น กก.ปพ." style="max-width:90px;">
     </div>
@@ -715,12 +719,13 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     </div>
 
     <!-- Sig page 3 -->
-    <div class="sig-block" style="margin-top:20px;">
+    <div class="sig-block" style="margin-top:10px;">
       <div class="sig-inner">
         <div class="sig-title">ขอรับรองว่าเป็นความจริงทุกประการ</div>
         <div class="sig-name-line">
           <span class="lbl">ลงชื่อ</span>
-          <span class="sig-dotline"></span>
+          <input class="di" id="sig3rank" type="text" placeholder="ยศ" style="max-width:70px;text-align:center;">
+          <span class="sig-dotline" style="flex:1;min-width:60px;"></span>
         </div>
         <div class="sig-paren-line">
           <span>(</span>
@@ -764,15 +769,29 @@ function formatThaiDate(input) {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  // sync ชื่อและตำแหน่งไปยังลายเซ็นทุกหน้าอัตโนมัติ
+  // sync ชื่อ-สกุล ไปยังลายเซ็นทุกหน้าอัตโนมัติ
   document.getElementById('fullname').addEventListener('input', function() {
     ['sig1n','sig2n','sig3n'].forEach(id => {
       document.getElementById(id).value = this.value;
     });
   });
+  // sync ยศ จากช่อง rank-field ไปยังลายเซ็นทุกหน้า
+  document.getElementById('rank-field').addEventListener('input', function() {
+    ['sig1rank','sig2rank','sig3rank'].forEach(id => {
+      document.getElementById(id).value = this.value;
+    });
+  });
+  // sync ตำแหน่ง
   document.getElementById('position').addEventListener('input', function() {
     ['sig1p','sig2p','sig3p'].forEach(id => {
       document.getElementById(id).value = this.value;
+    });
+  });
+  // sync สังกัด ไปยังช่อง sig unit ทุกหน้า (ถ้ามี)
+  document.getElementById('affiliation').addEventListener('input', function() {
+    ['sig1unit','sig2unit','sig3unit'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = this.value;
     });
   });
 
@@ -861,7 +880,7 @@ async function submitToSheet() {
 
   const payload = {
     unit1:        document.getElementById('unit1').value.trim()       || '—',
-    fullname,
+    fullname:     (document.getElementById('rank-field').value.trim() + ' ' + fullname).trim(),
     position:     document.getElementById('position').value.trim()    || '—',
     affiliation:  document.getElementById('affiliation').value.trim() || '—',
     address,
@@ -920,7 +939,7 @@ function clearFormKeepUnit() {
   const unit1Val = document.getElementById('unit1').value;
   const unit2Val = document.getElementById('unit2').value;
 
-  // ล้างทุก input text / number / date ยกเว้น unit1, unit2
+  // ล้างทุก input text / number / date ยกเว้น unit1, unit2, sigXunit
   const skipIds = ['unit1', 'unit2'];
   document.querySelectorAll('input.di').forEach(el => {
     if (!skipIds.includes(el.id)) el.value = '';
