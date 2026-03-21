@@ -608,9 +608,9 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
     <div class="irow">
       <span class="lbl">ค) วัน เดือน ปี ที่ประสบอุทกภัย</span>
-      <input class="di" id="flood-date-start" type="date" style="max-width:155px;">
+      <input class="di" id="flood-date-start" type="text" placeholder="วว/ดด/พ.ศ. เช่น 01/11/2567" style="max-width:170px;" oninput="formatThaiDate(this)" maxlength="12">
       <span class="lbl" style="margin: 0 6px;">ถึง</span>
-      <input class="di" id="flood-date-end" type="date" style="max-width:155px;">
+      <input class="di" id="flood-date-end" type="text" placeholder="วว/ดด/พ.ศ. เช่น 05/11/2567" style="max-width:170px;" oninput="formatThaiDate(this)" maxlength="12">
     </div>
 
     <div style="margin-top:8px;">
@@ -747,7 +747,22 @@ let SCRIPT_URL = localStorage.getItem('floodFormScriptUrl') || 'https://script.g
 
 // ============================================================
 
-// Auto-fill signature when name/position typed
+// Auto-format วว/ดด/พ.ศ.
+function formatThaiDate(input) {
+  let v = input.value.replace(/\D/g, ''); // เอาเฉพาะตัวเลข
+  if (v.length > 8) v = v.slice(0, 8);
+  let out = '';
+  if (v.length <= 2) {
+    out = v;
+  } else if (v.length <= 4) {
+    out = v.slice(0,2) + '/' + v.slice(2);
+  } else {
+    out = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+  }
+  input.value = out;
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
   // sync ชื่อและตำแหน่งไปยังลายเซ็นทุกหน้าอัตโนมัติ
   document.getElementById('fullname').addEventListener('input', function() {
@@ -827,8 +842,8 @@ function setStatus(type, msg) {
 async function submitToSheet() {
   const fullname = document.getElementById('fullname').value.trim();
   const address  = document.getElementById('address').value.trim();
-  const fdate    = document.getElementById('flood-date-start').value;
-  const fdateEnd = document.getElementById('flood-date-end').value;
+  const fdate    = document.getElementById('flood-date-start').value.trim();
+  const fdateEnd = document.getElementById('flood-date-end').value.trim();
 
   if (!fullname) { alert('กรุณากรอก ยศ ชื่อ-สกุล'); return; }
   if (!address)  { alert('กรุณากรอก ที่อยู่ที่เกิดอุทกภัย'); return; }
