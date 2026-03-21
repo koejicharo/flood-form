@@ -608,7 +608,9 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
     <div class="irow">
       <span class="lbl">ค) วัน เดือน ปี ที่ประสบอุทกภัย</span>
-      <input class="di" id="flood-date" type="date" style="max-width:155px;">
+      <input class="di" id="flood-date-start" type="date" style="max-width:155px;">
+      <span class="lbl" style="margin: 0 6px;">ถึง</span>
+      <input class="di" id="flood-date-end" type="date" style="max-width:155px;">
     </div>
 
     <div style="margin-top:8px;">
@@ -825,11 +827,13 @@ function setStatus(type, msg) {
 async function submitToSheet() {
   const fullname = document.getElementById('fullname').value.trim();
   const address  = document.getElementById('address').value.trim();
-  const fdate    = document.getElementById('flood-date').value;
+  const fdate    = document.getElementById('flood-date-start').value;
+  const fdateEnd = document.getElementById('flood-date-end').value;
 
   if (!fullname) { alert('กรุณากรอก ยศ ชื่อ-สกุล'); return; }
   if (!address)  { alert('กรุณากรอก ที่อยู่ที่เกิดอุทกภัย'); return; }
-  if (!fdate)    { alert('กรุณาเลือก วัน เดือน ปี ที่ประสบอุทกภัย'); return; }
+  if (!fdate)    { alert('กรุณาเลือก วันที่เริ่มประสบอุทกภัย'); return; }
+  if (!fdateEnd) { alert('กรุณาเลือก วันที่สิ้นสุดอุทกภัย'); return; }
 
   if (!SCRIPT_URL || SCRIPT_URL.trim() === '') {
     setStatus('error', '⚠️ ยังไม่ได้ตั้งค่า Script URL — กรอก URL ในช่องสีเหลืองด้านบนแล้วกด "บันทึก URL"');
@@ -846,7 +850,7 @@ async function submitToSheet() {
     position:     document.getElementById('position').value.trim()    || '—',
     affiliation:  document.getElementById('affiliation').value.trim() || '—',
     address,
-    floodDate:    fdate,
+    floodDate:    fdate + ' ถึง ' + fdateEnd,
     dmgHouse:     parseFloat(document.getElementById('dmg-house').value)     || 0,
     dmgCar:       parseFloat(document.getElementById('dmg-car').value)       || 0,
     dmgFurniture: parseFloat(document.getElementById('dmg-furniture').value) || 0,
