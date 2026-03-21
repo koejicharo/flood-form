@@ -120,8 +120,15 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 .unit-row .lbl { white-space: nowrap; }
 .unit-row .di { min-width: 80px; }
 
-/* Section heading */
-.sec-label { font-size: 13.5px; font-weight: 700; margin-bottom: 10px; }
+/* Section heading — สไตล์ราชการ */
+.sec-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 5px;
+  border-bottom: 1.5px solid #222;
+  letter-spacing: 0.2px;
+}
 
 /* Photo frame */
 .pframe {
@@ -155,12 +162,70 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
   display: none;
 }
 
-/* Signature block */
-.sig-block { margin-top: 18px; font-size: 13px; line-height: 1; }
-.sig-center { text-align: center; margin-bottom: 8px; font-size: 13px; }
-.sig-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 6px; }
-.sig-row .lbl { white-space: nowrap; flex-shrink: 0; }
-.sig-dotline { border-bottom: 1px dotted #444; flex: 1; height: 14px; display: block; }
+/* Signature block — กึ่งกลาง สไตล์ราชการ */
+.sig-block {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+}
+.sig-inner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 260px;
+  max-width: 320px;
+  font-size: 13.5px;
+  line-height: 1;
+  gap: 0;
+}
+.sig-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 14px;
+  letter-spacing: 0.3px;
+}
+.sig-name-line {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 7px;
+  justify-content: center;
+}
+.sig-name-line .lbl { white-space: nowrap; flex-shrink: 0; }
+.sig-dotline {
+  border-bottom: 1px dotted #444;
+  width: 190px;
+  height: 14px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.sig-paren-line {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 7px;
+}
+.sig-paren-line input.di {
+  width: 180px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.sig-pos-line {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+}
+.sig-pos-line .lbl { white-space: nowrap; flex-shrink: 0; }
+.sig-pos-line input.di {
+  width: 180px;
+  flex-shrink: 0;
+}
 
 /* Page num */
 .pgnum { text-align: center; font-size: 13px; margin-bottom: 16px; }
@@ -190,38 +255,166 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 }
 .total-row input { max-width: 130px; text-align: right; font-weight: 700; }
 
+
+/* ====== SAVED POPUP ====== */
+.saved-popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.saved-popup-overlay.show { display: flex; }
+.saved-popup-box {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 48px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  max-width: 360px;
+  width: 90%;
+}
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.saved-popup-icon { font-size: 64px; margin-bottom: 16px; display: block; }
+.saved-popup-title {
+  font-size: 22px; font-weight: 800;
+  color: #166534; margin-bottom: 8px;
+}
+.saved-popup-sub {
+  font-size: 14px; color: #64748b;
+  margin-bottom: 24px; line-height: 1.6;
+}
+.saved-popup-btn {
+  padding: 11px 32px;
+  background: #166534; color: white;
+  border: none; border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; margin: 4px;
+  transition: opacity 0.2s;
+}
+.saved-popup-btn:hover { opacity: 0.85; }
+.saved-popup-btn.outline {
+  background: transparent; color: #166534;
+  border: 2px solid #166534;
+}
+
 /* ====== PRINT ====== */
 @media print {
-  @page { size: A4; margin: 0; }
+  @page { size: 210mm 297mm; margin: 0; }
 
-  body { background: white; }
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html { width: 210mm; }
+
+  body {
+    background: white !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   .control-bar { display: none !important; }
   .status-bar  { display: none !important; }
+  .url-setup-bar { display: none !important; }
 
-  .pages-wrapper { padding: 0; gap: 0; display: block; }
+  .pages-wrapper {
+    padding: 0 !important;
+    gap: 0 !important;
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+  }
 
   .a4 {
-    width: 210mm;
-    min-height: 297mm;
-    height: 297mm;
-    padding: 15mm 18mm 16mm;
-    box-shadow: none;
-    page-break-after: always;
-    page-break-inside: avoid;
-    overflow: hidden;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: unset !important;
+    padding: 13mm 17mm 13mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
   }
-  .a4:last-child { page-break-after: auto; }
+
+  .a4:last-child { page-break-after: auto !important; }
 
   input.di {
     border: none !important;
-    border-bottom: 1px dotted #555 !important;
+    border-bottom: 1px dotted #666 !important;
     background: transparent !important;
-    font-size: 13px;
+    font-size: 12px !important;
     box-shadow: none !important;
   }
 
   .pframe .uz { display: none !important; }
   .pframe img.prev { display: block !important; }
+
+  .sig-block { margin-top: 16px !important; }
+  .sig-dotline { border-bottom: 1px dotted #666 !important; }
+  .sig-inner input.di {
+    border-bottom: 1px dotted #666 !important;
+    background: transparent !important;
+    text-align: center;
+  }
+
+  .sec-label { font-size: 13px !important; border-bottom: 1px solid #333 !important; }
+  .doc-title { font-size: 12.5px !important; margin-bottom: 12px !important; }
+  .unit-row  { font-size: 12.5px !important; margin-bottom: 14px !important; }
+  .irow      { font-size: 12.5px !important; margin-bottom: 7px !important; }
+  .dmg-row, .cap-row { font-size: 12px !important; }
+  .total-row { font-size: 12.5px !important; }
+  .pgnum     { font-size: 12px !important; margin-bottom: 12px !important; }
+  .grid2x2   { gap: 10px !important; margin-top: 8px !important; }
+  .pframe    { border: 1px solid #555 !important; }
+}
+
+/* URL setup bar (screen only) */
+.url-setup-bar {
+  background: #fffbeb;
+  border-bottom: 2px solid #f59e0b;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.url-setup-bar .lbl { font-weight: 700; color: #92400e; white-space: nowrap; }
+.url-setup-bar input[type="text"] {
+  flex: 1;
+  padding: 7px 12px;
+  border: 1.5px solid #f59e0b;
+  border-radius: 6px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  outline: none;
+  background: white;
+}
+.url-setup-bar input[type="text"]:focus { border-color: #d97706; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+.btn-save-url {
+  padding: 7px 18px;
+  background: #d97706; color: white;
+  border: none; border-radius: 6px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
+}
+.btn-save-url:hover { background: #b45309; }
+.url-saved-tag {
+  display: none;
+  background: #dcfce7; color: #166534;
+  border: 1.5px solid #86efac; border-radius: 6px;
+  padding: 6px 14px; font-size: 13px; font-weight: 700; white-space: nowrap;
 }
 </style>
 </head>
@@ -240,6 +433,14 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 <div class="status-bar" id="status-bar">
   <div class="spinner" id="spin" style="display:none"></div>
   <span id="status-txt"></span>
+</div>
+
+<!-- URL SETUP BAR -->
+<div class="url-setup-bar" id="url-setup-bar">
+  <span class="lbl">⚙️ ตั้งค่า Script URL:</span>
+  <input type="text" id="script-url-input" placeholder="วาง URL จาก Google Apps Script ที่นี่  เช่น https://script.google.com/macros/s/XXXX/exec">
+  <button class="btn-save-url" onclick="saveScriptUrl()">💾 บันทึก URL</button>
+  <span class="url-saved-tag" id="url-saved-tag">✅ บันทึกแล้ว</span>
 </div>
 
 <!-- ====================================================
@@ -261,7 +462,7 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
       <input class="di" id="unit2" type="text" placeholder="................................................" style="flex:1;max-width:160px;">
     </div>
 
-    <div class="sec-label">ก. สำเนาบัตรประจำตัวประชาชน</div>
+    <div class="sec-label">๑. สำเนาบัตรประจำตัวประชาชน</div>
 
     <div class="pframe" style="height:200px;">
       <label class="uz" for="f-idcard">
@@ -273,19 +474,21 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     </div>
 
     <div class="sig-block">
-      <div class="sig-center">สำเนาถูกต้อง</div>
-      <div class="sig-row">
-        <span class="lbl">ลงชื่อ</span>
-        <span class="sig-dotline" style="max-width:200px;"></span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span>
-        <input class="di" id="sig1n" type="text" placeholder="................................................" style="max-width:210px;">
-        <span>)</span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">ตำแหน่ง</span>
-        <input class="di" id="sig1p" type="text" placeholder="................................................" style="max-width:210px;">
+      <div class="sig-inner">
+        <div class="sig-title">สำเนาถูกต้อง</div>
+        <div class="sig-name-line">
+          <span class="lbl">ลงชื่อ</span>
+          <span class="sig-dotline"></span>
+        </div>
+        <div class="sig-paren-line">
+          <span>(</span>
+          <input class="di" id="sig1n" type="text" placeholder="ชื่อ-สกุล">
+          <span>)</span>
+        </div>
+        <div class="sig-pos-line">
+          <span class="lbl">ตำแหน่ง</span>
+          <input class="di" id="sig1p" type="text" placeholder="ตำแหน่ง">
+        </div>
       </div>
     </div>
   </div><!-- /page1 -->
@@ -294,7 +497,7 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
   <div class="a4">
     <div class="pgnum">-๒-</div>
 
-    <div class="sec-label">ข. สำเนาทะเบียนบ้าน</div>
+    <div class="sec-label">๒. สำเนาทะเบียนบ้าน</div>
 
     <div class="pframe" style="height:240px;">
       <label class="uz" for="f-house">
@@ -306,19 +509,21 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     </div>
 
     <div class="sig-block">
-      <div class="sig-center">สำเนาถูกต้อง</div>
-      <div class="sig-row">
-        <span class="lbl">ลงชื่อ</span>
-        <span class="sig-dotline" style="max-width:200px;"></span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span>
-        <input class="di" id="sig2n" type="text" placeholder="................................................" style="max-width:210px;">
-        <span>)</span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">ตำแหน่ง</span>
-        <input class="di" id="sig2p" type="text" placeholder="................................................" style="max-width:210px;">
+      <div class="sig-inner">
+        <div class="sig-title">สำเนาถูกต้อง</div>
+        <div class="sig-name-line">
+          <span class="lbl">ลงชื่อ</span>
+          <span class="sig-dotline"></span>
+        </div>
+        <div class="sig-paren-line">
+          <span>(</span>
+          <input class="di" id="sig2n" type="text" placeholder="ชื่อ-สกุล">
+          <span>)</span>
+        </div>
+        <div class="sig-pos-line">
+          <span class="lbl">ตำแหน่ง</span>
+          <input class="di" id="sig2p" type="text" placeholder="ตำแหน่ง">
+        </div>
       </div>
     </div>
   </div><!-- /page2 -->
@@ -450,20 +655,22 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     </div>
 
     <!-- Sig page 3 -->
-    <div class="sig-block" style="margin-top:18px;">
-      <div class="sig-center">ขอรับรองว่าเป็นความจริงทุกประการ</div>
-      <div class="sig-row">
-        <span class="lbl">ลงชื่อ</span>
-        <span class="sig-dotline" style="max-width:200px;"></span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span>
-        <input class="di" id="sig3n" type="text" placeholder="................................................" style="max-width:210px;">
-        <span>)</span>
-      </div>
-      <div class="sig-row">
-        <span class="lbl">ตำแหน่ง</span>
-        <input class="di" id="sig3p" type="text" placeholder="................................................" style="max-width:210px;">
+    <div class="sig-block" style="margin-top:20px;">
+      <div class="sig-inner">
+        <div class="sig-title">ขอรับรองว่าเป็นความจริงทุกประการ</div>
+        <div class="sig-name-line">
+          <span class="lbl">ลงชื่อ</span>
+          <span class="sig-dotline"></span>
+        </div>
+        <div class="sig-paren-line">
+          <span>(</span>
+          <input class="di" id="sig3n" type="text" placeholder="ชื่อ-สกุล">
+          <span>)</span>
+        </div>
+        <div class="sig-pos-line">
+          <span class="lbl">ตำแหน่ง</span>
+          <input class="di" id="sig3p" type="text" placeholder="ตำแหน่ง">
+        </div>
       </div>
     </div>
 
@@ -473,9 +680,25 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
 <script>
 // ============================================================
-//  CONFIG
+//  CONFIG — Script URL (บันทึกใน localStorage อัตโนมัติ)
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIuCs1fP61Urx4Z4Muuj3RF1H275zmdf28bYi9Kiz3T9nzKNBED8TH6mNmJt8RLDui/exec';
+let SCRIPT_URL = localStorage.getItem('floodFormScriptUrl') || 'https://script.google.com/macros/s/AKfycbwIuCs1fP61Urx4Z4Muuj3RF1H275zmdf28bYi9Kiz3T9nzKNBED8TH6mNmJt8RLDui/exec';
+
+function saveScriptUrl() {
+  const val = document.getElementById('script-url-input').value.trim();
+  if (!val || !val.startsWith('https://script.google.com')) {
+    alert('URL ไม่ถูกต้อง\nต้องขึ้นต้นด้วย https://script.google.com/macros/s/...');
+    return;
+  }
+  SCRIPT_URL = val;
+  localStorage.setItem('floodFormScriptUrl', val);
+  document.getElementById('url-saved-tag').style.display = 'inline-block';
+  document.getElementById('url-setup-bar').style.background = '#f0fdf4';
+  document.getElementById('url-setup-bar').style.borderBottomColor = '#86efac';
+  setTimeout(() => {
+    document.getElementById('url-saved-tag').style.display = 'none';
+  }, 3000);
+}
 // ============================================================
 
 // Pre-fill from URL params
@@ -508,6 +731,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   window._pre = { unit1, full, pos, affil };
+
+  // โหลด Script URL ที่บันทึกไว้
+  const savedUrl = localStorage.getItem('floodFormScriptUrl') || '';
+  if (savedUrl) {
+    SCRIPT_URL = savedUrl;
+    document.getElementById('script-url-input').value = savedUrl;
+    document.getElementById('url-setup-bar').style.background = '#f0fdf4';
+    document.getElementById('url-setup-bar').style.borderBottomColor = '#86efac';
+  }
 });
 
 // Photo preview
@@ -554,8 +786,10 @@ async function submitToSheet() {
   if (!address)  { alert('กรุณากรอก ที่อยู่ที่เกิดอุทกภัย'); return; }
   if (!fdate)    { alert('กรุณาเลือก วัน เดือน ปี ที่ประสบอุทกภัย'); return; }
 
-  if (!SCRIPT_URL || SCRIPT_URL.includes('YOUR_GOOGLE')) {
-    setStatus('error', '⚠️ ยังไม่ได้ตั้งค่า Script URL — แก้ไขในไฟล์ก่อนใช้งาน');
+  if (!SCRIPT_URL || SCRIPT_URL.trim() === '') {
+    setStatus('error', '⚠️ ยังไม่ได้ตั้งค่า Script URL — กรอก URL ในช่องสีเหลืองด้านบนแล้วกด "บันทึก URL"');
+    document.getElementById('url-setup-bar').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('script-url-input').focus();
     return;
   }
 
@@ -591,13 +825,40 @@ async function submitToSheet() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    setStatus('success', '✅ ส่งข้อมูลสำเร็จ! — กด "พิมพ์ / บันทึก PDF" เพื่อพิมพ์เอกสาร');
+    setStatus('success', '✅ บันทึกข้อมูลสำเร็จ! — กด "พิมพ์ / บันทึก PDF" เพื่อพิมพ์เอกสาร');
+    showSavedPopup();
   } catch (err) {
     setStatus('error', '⚠️ ส่งข้อมูลไม่สำเร็จ: ' + (err.message || 'Network error'));
   } finally {
     btn.disabled = false;
   }
 }
+
+function showSavedPopup() {
+  document.getElementById('saved-popup').classList.add('show');
+}
+function closeSavedPopup() {
+  document.getElementById('saved-popup').classList.remove('show');
+}
 </script>
+
+<!-- SAVED POPUP -->
+<div class="saved-popup-overlay" id="saved-popup">
+  <div class="saved-popup-box">
+    <span class="saved-popup-icon">✅</span>
+    <div class="saved-popup-title">บันทึกสำเร็จ!</div>
+    <div class="saved-popup-sub">
+      ข้อมูลถูกบันทึกเข้า Google Sheet แล้ว<br>
+      กดพิมพ์เพื่อบันทึกเป็น PDF ราชการ
+    </div>
+    <button class="saved-popup-btn" onclick="closeSavedPopup(); window.print();">
+      🖨️ พิมพ์ / บันทึก PDF
+    </button>
+    <br>
+    <button class="saved-popup-btn outline" onclick="closeSavedPopup()">
+      ปิด
+    </button>
+  </div>
+</div>
 </body>
 </html>
