@@ -913,6 +913,42 @@ function showSavedPopup() {
 function closeSavedPopup() {
   document.getElementById('saved-popup').classList.remove('show');
 }
+
+// ล้างข้อมูลทั้งหมด ยกเว้น หน่วย กก./สภ. และ บก./ภ.จว.
+function clearFormKeepUnit() {
+  // เก็บค่า หน่วย และ บก. ไว้ก่อน
+  const unit1Val = document.getElementById('unit1').value;
+  const unit2Val = document.getElementById('unit2').value;
+
+  // ล้างทุก input text / number / date ยกเว้น unit1, unit2
+  const skipIds = ['unit1', 'unit2'];
+  document.querySelectorAll('input.di').forEach(el => {
+    if (!skipIds.includes(el.id)) el.value = '';
+  });
+
+  // ล้างภาพทั้งหมด
+  ['img-idcard','img-house','img-dmg1','img-dmg2','img-dmg3','img-dmg4'].forEach(id => {
+    const img = document.getElementById(id);
+    if (img) { img.src = ''; img.style.display = 'none'; }
+  });
+
+  // แสดง upload zone ใหม่
+  document.querySelectorAll('.uz').forEach(el => el.style.display = '');
+
+  // ล้าง file inputs
+  document.querySelectorAll('input[type="file"]').forEach(el => el.value = '');
+
+  // คืนค่า หน่วย และ บก.
+  document.getElementById('unit1').value = unit1Val;
+  document.getElementById('unit2').value = unit2Val;
+
+  // ล้าง status bar
+  const bar = document.getElementById('status-bar');
+  if (bar) bar.className = 'status-bar';
+
+  // scroll กลับขึ้นบน
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 
 <!-- FLOATING SAVE BUTTON -->
@@ -933,12 +969,12 @@ function closeSavedPopup() {
       ข้อมูลถูกบันทึกเข้า Google Sheet แล้ว<br>
       กดพิมพ์เพื่อบันทึกเป็น PDF ราชการ
     </div>
-    <button class="saved-popup-btn" onclick="closeSavedPopup(); window.print();">
+    <button class="saved-popup-btn" onclick="closeSavedPopup(); window.print(); setTimeout(clearFormKeepUnit, 1000);">
       🖨️ พิมพ์ / บันทึก PDF
     </button>
     <br>
-    <button class="saved-popup-btn outline" onclick="closeSavedPopup()">
-      ปิด
+    <button class="saved-popup-btn outline" onclick="closeSavedPopup(); clearFormKeepUnit();">
+      ✏️ ลงข้อมูลคนถัดไป (ไม่พิมพ์)
     </button>
   </div>
 </div>
