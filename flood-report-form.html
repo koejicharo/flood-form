@@ -256,6 +256,58 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 .total-row input { max-width: 130px; text-align: right; font-weight: 700; }
 
 
+
+/* ====== SAVE BUTTON FIXED BOTTOM ====== */
+.save-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.save-fab-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(22,101,52,0.45);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border-bottom: 3px solid #14532d;
+  letter-spacing: 0.3px;
+}
+.save-fab-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(22,101,52,0.5);
+}
+.save-fab-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.save-fab-btn .fab-icon { font-size: 20px; }
+
+/* progress ring */
+.progress-ring {
+  display: none;
+  width: 20px; height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes fabspin { to { transform: rotate(360deg); } }
+
 /* ====== SAVED POPUP ====== */
 .saved-popup-overlay {
   display: none;
@@ -325,7 +377,7 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
   .control-bar { display: none !important; }
   .status-bar  { display: none !important; }
-  .url-setup-bar { display: none !important; }
+  .save-fab { display: none !important; }
 
   .pages-wrapper {
     padding: 0 !important;
@@ -380,42 +432,6 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
   .pframe    { border: 1px solid #555 !important; }
 }
 
-/* URL setup bar (screen only) */
-.url-setup-bar {
-  background: #fffbeb;
-  border-bottom: 2px solid #f59e0b;
-  padding: 10px 28px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-}
-.url-setup-bar .lbl { font-weight: 700; color: #92400e; white-space: nowrap; }
-.url-setup-bar input[type="text"] {
-  flex: 1;
-  padding: 7px 12px;
-  border: 1.5px solid #f59e0b;
-  border-radius: 6px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 13px;
-  outline: none;
-  background: white;
-}
-.url-setup-bar input[type="text"]:focus { border-color: #d97706; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
-.btn-save-url {
-  padding: 7px 18px;
-  background: #d97706; color: white;
-  border: none; border-radius: 6px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
-}
-.btn-save-url:hover { background: #b45309; }
-.url-saved-tag {
-  display: none;
-  background: #dcfce7; color: #166534;
-  border: 1.5px solid #86efac; border-radius: 6px;
-  padding: 6px 14px; font-size: 13px; font-weight: 700; white-space: nowrap;
-}
 </style>
 </head>
 <body>
@@ -426,8 +442,6 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
     <small>แบบฟอร์มราชการตำรวจ — กก.ปพ. บก.สส.ภ.๙</small>
     รายงานความเสียหายที่เกิดจากสถานการณ์อุทกภัย
   </div>
-  <button class="btn-green" id="btn-send" onclick="submitToSheet()">📤 ส่งข้อมูลเข้า Google Sheet</button>
-  <button class="btn-gold" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button>
 </div>
 
 <div class="status-bar" id="status-bar">
@@ -435,13 +449,6 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
   <span id="status-txt"></span>
 </div>
 
-<!-- URL SETUP BAR -->
-<div class="url-setup-bar" id="url-setup-bar">
-  <span class="lbl">⚙️ ตั้งค่า Script URL:</span>
-  <input type="text" id="script-url-input" placeholder="วาง URL จาก Google Apps Script ที่นี่  เช่น https://script.google.com/macros/s/XXXX/exec">
-  <button class="btn-save-url" onclick="saveScriptUrl()">💾 บันทึก URL</button>
-  <span class="url-saved-tag" id="url-saved-tag">✅ บันทึกแล้ว</span>
-</div>
 
 <!-- ====================================================
      PAGES
@@ -457,7 +464,7 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
     <div class="unit-row">
       <span class="lbl">หน่วย กก./สภ.</span>
-      <input class="di" id="unit1" type="text" placeholder="................................................" style="flex:1;max-width:180px;">
+      <input class="di" id="unit1" type="text" placeholder="เช่น กก.ปพ.บก.สส.ภ.9" style="flex:1;max-width:180px;">
       <span class="lbl" style="margin-left:18px;">บก./ภ.จว.</span>
       <input class="di" id="unit2" type="text" placeholder="................................................" style="flex:1;max-width:160px;">
     </div>
@@ -536,11 +543,11 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 
     <div class="irow">
       <span class="lbl">ก) ยศ ชื่อ – สกุล</span>
-      <input class="di" id="fullname" type="text" placeholder=".......................................">
+      <input class="di" id="fullname" type="text" placeholder="ยศ ชื่อ – สกุล เช่น พ.ต.ท.ชัยโรจน์ ทวีกายุจันทร์">
       <span class="lbl" style="margin-left:10px;">ตำแหน่ง</span>
-      <input class="di" id="position" type="text" placeholder="................." style="max-width:110px;">
+      <input class="di" id="position" type="text" placeholder="เช่น สว." style="max-width:110px;">
       <span class="lbl" style="margin-left:10px;">สังกัด</span>
-      <input class="di" id="affiliation" type="text" placeholder="............." style="max-width:90px;">
+      <input class="di" id="affiliation" type="text" placeholder="เช่น กก.ปพ." style="max-width:90px;">
     </div>
 
     <div class="irow">
@@ -684,62 +691,24 @@ input.di::placeholder { color: #aaa; font-size: 12px; }
 // ============================================================
 let SCRIPT_URL = localStorage.getItem('floodFormScriptUrl') || 'https://script.google.com/macros/s/AKfycbwIuCs1fP61Urx4Z4Muuj3RF1H275zmdf28bYi9Kiz3T9nzKNBED8TH6mNmJt8RLDui/exec';
 
-function saveScriptUrl() {
-  const val = document.getElementById('script-url-input').value.trim();
-  if (!val || !val.startsWith('https://script.google.com')) {
-    alert('URL ไม่ถูกต้อง\nต้องขึ้นต้นด้วย https://script.google.com/macros/s/...');
-    return;
-  }
-  SCRIPT_URL = val;
-  localStorage.setItem('floodFormScriptUrl', val);
-  document.getElementById('url-saved-tag').style.display = 'inline-block';
-  document.getElementById('url-setup-bar').style.background = '#f0fdf4';
-  document.getElementById('url-setup-bar').style.borderBottomColor = '#86efac';
-  setTimeout(() => {
-    document.getElementById('url-saved-tag').style.display = 'none';
-  }, 3000);
-}
+
 // ============================================================
 
-// Pre-fill from URL params
+// Auto-fill signature when name/position typed
 window.addEventListener('DOMContentLoaded', () => {
-  const p     = new URLSearchParams(window.location.search);
-  const rank  = p.get('rank')        || '';
-  const fname = p.get('fname')       || '';
-  const lname = p.get('lname')       || '';
-  const pos   = p.get('position')    || '';
-  const affil = p.get('affiliation') || '';
-  const unit1 = p.get('unit1')       || '';
-  const full  = [rank, fname, lname].filter(Boolean).join(' ');
+  // sync ชื่อและตำแหน่งไปยังลายเซ็นทุกหน้าอัตโนมัติ
+  document.getElementById('fullname').addEventListener('input', function() {
+    ['sig1n','sig2n','sig3n'].forEach(id => {
+      document.getElementById(id).value = this.value;
+    });
+  });
+  document.getElementById('position').addEventListener('input', function() {
+    ['sig1p','sig2p','sig3p'].forEach(id => {
+      document.getElementById(id).value = this.value;
+    });
+  });
 
-  const setLocked = (id, val) => {
-    if (!val) return;
-    const el = document.getElementById(id);
-    el.value = val;
-    el.readOnly = true;
-  };
-
-  setLocked('unit1', unit1);
-  setLocked('fullname', full);
-  setLocked('position', pos);
-  setLocked('affiliation', affil);
-
-  // Auto-fill signature fields
-  if (full) {
-    ['sig1n','sig2n','sig3n'].forEach(id => { document.getElementById(id).value = full; });
-    if (pos) ['sig1p','sig2p','sig3p'].forEach(id => { document.getElementById(id).value = pos; });
-  }
-
-  window._pre = { unit1, full, pos, affil };
-
-  // โหลด Script URL ที่บันทึกไว้
-  const savedUrl = localStorage.getItem('floodFormScriptUrl') || '';
-  if (savedUrl) {
-    SCRIPT_URL = savedUrl;
-    document.getElementById('script-url-input').value = savedUrl;
-    document.getElementById('url-setup-bar').style.background = '#f0fdf4';
-    document.getElementById('url-setup-bar').style.borderBottomColor = '#86efac';
-  }
+  window._pre = {};
 });
 
 // Photo preview
@@ -793,14 +762,13 @@ async function submitToSheet() {
     return;
   }
 
-  const pre   = window._pre || {};
   const total = calcTotal();
 
   const payload = {
-    unit1:        document.getElementById('unit1').value || '—',
+    unit1:        document.getElementById('unit1').value.trim()       || '—',
     fullname,
-    position:     document.getElementById('position').value    || '—',
-    affiliation:  document.getElementById('affiliation').value || '—',
+    position:     document.getElementById('position').value.trim()    || '—',
+    affiliation:  document.getElementById('affiliation').value.trim() || '—',
     address,
     floodDate:    fdate,
     dmgHouse:     parseFloat(document.getElementById('dmg-house').value)     || 0,
@@ -814,9 +782,16 @@ async function submitToSheet() {
     cap4: document.getElementById('cap4').value || '—',
   };
 
-  const btn = document.getElementById('btn-send');
-  btn.disabled = true;
-  setStatus('loading', 'กำลังส่งข้อมูลเข้า Google Sheet...');
+  // FAB loading state
+  const fab = document.getElementById('fab-btn');
+  const fabIcon = document.getElementById('fab-icon');
+  const fabText = document.getElementById('fab-text');
+  const fabRing = document.getElementById('fab-ring');
+  fab.disabled = true;
+  fabIcon.style.display = 'none';
+  fabText.textContent = 'กำลังบันทึก...';
+  fabRing.style.display = 'inline-block';
+  setStatus('loading', 'กำลังบันทึกข้อมูลเข้า Google Sheet...');
 
   try {
     await fetch(SCRIPT_URL, {
@@ -825,12 +800,15 @@ async function submitToSheet() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    setStatus('success', '✅ บันทึกข้อมูลสำเร็จ! — กด "พิมพ์ / บันทึก PDF" เพื่อพิมพ์เอกสาร');
+    setStatus('success', '✅ บันทึกข้อมูลสำเร็จ!');
     showSavedPopup();
   } catch (err) {
-    setStatus('error', '⚠️ ส่งข้อมูลไม่สำเร็จ: ' + (err.message || 'Network error'));
+    setStatus('error', '⚠️ บันทึกไม่สำเร็จ: ' + (err.message || 'Network error'));
   } finally {
-    btn.disabled = false;
+    fab.disabled = false;
+    fabIcon.style.display = 'inline';
+    fabText.textContent = 'บันทึกข้อมูล';
+    fabRing.style.display = 'none';
   }
 }
 
@@ -841,6 +819,15 @@ function closeSavedPopup() {
   document.getElementById('saved-popup').classList.remove('show');
 }
 </script>
+
+<!-- FLOATING SAVE BUTTON -->
+<div class="save-fab" id="save-fab">
+  <button class="save-fab-btn" id="fab-btn" onclick="submitToSheet()">
+    <span class="fab-icon" id="fab-icon">💾</span>
+    <span id="fab-text">บันทึกข้อมูล</span>
+    <span class="progress-ring" id="fab-ring" style="animation:spin 0.7s linear infinite;"></span>
+  </button>
+</div>
 
 <!-- SAVED POPUP -->
 <div class="saved-popup-overlay" id="saved-popup">
