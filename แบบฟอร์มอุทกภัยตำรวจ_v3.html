@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายงานความเสียหายอุทกภัย — ข้าราชการตำรวจ ภ.9</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #0b1f3a;
+  --navy2: #16335a;
+  --navy3: #1e4080;
+  --gold: #c8a12a;
+  --gold2: #e8c96a;
+  --red: #7a1515;
+  --border: #b8c9de;
+  --bg: #edf1f7;
+  --white: #ffffff;
+  --text: #1a202c;
+  --muted: #64748b;
+  --locked-bg: #f0f4f8;
+  --locked-border: #c8d4e0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===== HEADER — ราชการ: ข้อความล้วน ===== */
+.doc-header {
+  background: var(--white);
+  border-bottom: 3px double var(--navy);
+  padding: 22px 40px 18px;
+  text-align: center;
+}
+
+.doc-header .line-top {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.doc-header h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.55;
+  letter-spacing: 0.3px;
+}
+
+.doc-header .sub-line {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy2);
+}
+
+.header-rule {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ===== BODY ===== */
+.form-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.page-wrapper {
+  background: var(--white);
+  margin: 20px 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 28px rgba(0,0,0,0.09);
+  overflow: hidden;
+}
+
+.form-body {
+  padding: 28px 38px 36px;
+}
+
+/* Info bar */
+.info-bar {
+  display: flex;
+  gap: 20px;
+  background: linear-gradient(90deg, #f0f4fa, #e8eef8);
+  border: 1.5px solid var(--locked-border);
+  border-radius: 8px;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  align-items: flex-start;
+}
+
+.locked-field { flex: 1; }
+
+.locked-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy3);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.locked-value {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--locked-bg);
+  border: 1.5px solid var(--locked-border);
+  border-radius: 6px;
+  padding: 7px 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lock-icon { font-size: 11px; color: var(--muted); }
+
+/* Sections */
+.section { margin-bottom: 28px; }
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 9px;
+  border-bottom: 2px solid var(--navy);
+}
+
+.section-num {
+  width: 28px; height: 28px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.section-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* Fields */
+.field { margin-bottom: 14px; }
+
+label.lbl {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy2);
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select, textarea {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: white;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--navy3);
+  box-shadow: 0 0 0 3px rgba(30,64,128,0.09);
+}
+
+input[readonly] {
+  background: var(--locked-bg);
+  color: var(--navy);
+  border-color: var(--locked-border);
+  cursor: not-allowed;
+}
+
+.row-3 { display: grid; grid-template-columns: 2fr 1.2fr 1.4fr; gap: 14px; }
+
+/* ===== PHOTO + DAMAGE COMBINED GRID ===== */
+.photo-damage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.photo-damage-card {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafbfc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card header tag (บ้าน / รถ / ของใช้ / อื่นๆ) */
+.card-tag {
+  background: var(--navy);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-tag .cat-icon { font-size: 14px; }
+
+/* Photo area */
+.photo-upload-area {
+  min-height: 155px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 5px;
+  padding: 14px;
+  width: 100%;
+  background: #f8fafc;
+  transition: background 0.2s;
+}
+
+.photo-upload-area:hover { background: #eef2f7; }
+.photo-upload-area input[type="file"] { display: none; }
+
+.upload-placeholder { text-align: center; }
+.upload-icon-big { font-size: 26px; display: block; margin-bottom: 3px; }
+.upload-hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.photo-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  display: none;
+}
+
+/* Damage amount row */
+.card-amount {
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+  background: #f0f5ff;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-amount label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-amount .currency-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.card-amount .currency-wrap::before {
+  content: '฿';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.card-amount input[type="number"] {
+  padding-left: 28px;
+  border-radius: 6px;
+  font-weight: 600;
+  border-color: #a0b4d0;
+  background: white;
+}
+
+/* Caption row */
+.card-caption {
+  background: #f5f7fa;
+  padding: 8px 12px;
+}
+
+.card-caption .cap-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy3);
+  margin-bottom: 3px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+.card-caption input[type="text"] {
+  border-radius: 5px;
+  font-size: 13.5px;
+  padding: 6px 10px;
+  border-color: #c8d4e0;
+}
+
+/* Total bar */
+.total-bar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, var(--navy), var(--navy2));
+  color: white;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin-top: 14px;
+  gap: 12px;
+}
+
+.total-bar .total-label {
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.total-bar input {
+  background: rgba(255,255,255,0.15) !important;
+  border: 1.5px solid rgba(255,255,255,0.35) !important;
+  color: white !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  text-align: right;
+  width: 220px;
+  border-radius: 6px;
+  cursor: not-allowed;
+  padding: 7px 14px !important;
+}
+
+/* Single upload (บัตร, ทะเบียน) */
+.single-upload-box {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafbfc;
+  max-width: 480px;
+  transition: border-color 0.2s;
+}
+.single-upload-box:hover { border-color: var(--navy3); }
+
+/* Buttons */
+.btn-row { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; }
+
+.btn-print {
+  padding: 14px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  border-bottom: 3px solid var(--gold);
+  transition: opacity 0.2s;
+}
+.btn-print:hover { opacity: 0.9; }
+
+.btn-clear {
+  padding: 10px;
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn-clear:hover { background: #f0f4f8; }
+
+.hint { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.required { color: #e53e3e; margin-left: 2px; }
+
+/* ===== PRINT ===== */
+@media print {
+  body { background: white; font-size: 12px; }
+
+  .doc-header {
+    border-bottom: 2.5px double black;
+    padding: 10px 30px 12px;
+  }
+
+  .doc-header h1 { font-size: 16px; color: black; }
+  .doc-header .sub-line { font-size: 13px; color: #333; }
+  .doc-header .line-top { color: #666; }
+  .header-rule { display: none; }
+
+  .form-wrap { max-width: 100%; }
+  .page-wrapper { margin: 6px 0 0; box-shadow: none; border-radius: 0; }
+  .form-body { padding: 10px 24px 16px; }
+
+  .btn-row { display: none !important; }
+
+  input, select, textarea {
+    border: none !important;
+    border-bottom: 1px solid #888 !important;
+    border-radius: 0 !important;
+    padding: 2px 3px !important;
+    font-size: 12px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  input[readonly] {
+    background: transparent !important;
+    border-bottom: 1px solid #aaa !important;
+  }
+
+  .info-bar {
+    background: none !important;
+    border: 1px solid #999;
+    padding: 6px 12px;
+    border-radius: 0;
+  }
+
+  .locked-value {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid #aaa !important;
+    border-radius: 0 !important;
+    padding: 1px 0 !important;
+  }
+
+  .section-head { border-bottom: 2px solid black; }
+  .section-num { background: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .photo-damage-card {
+    border: 1.5px solid #555;
+    border-radius: 0;
+    page-break-inside: avoid;
+  }
+
+  .card-tag {
+    background: #222 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .photo-upload-area { min-height: 100px; }
+  .upload-placeholder { display: none; }
+  .photo-preview { display: block !important; max-height: 120px; }
+
+  .card-amount {
+    background: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    border-radius: 0;
+    padding: 5px 10px;
+  }
+
+  .card-amount .currency-wrap::before { color: #444; }
+
+  .card-caption { background: none; }
+
+  .total-bar {
+    background: #1a1a1a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    border-radius: 0;
+    padding: 8px 14px;
+  }
+
+  .total-bar input {
+    color: white !important;
+    font-size: 15px !important;
+    background: rgba(255,255,255,0.2) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    width: 180px;
+    padding: 4px 10px !important;
+  }
+
+  .single-upload-box {
+    border: 1.5px solid #555 !important;
+    border-style: solid !important;
+    border-radius: 0;
+  }
+
+  .photo-damage-grid { page-break-inside: avoid; }
+  .section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="doc-header form-wrap">
+  <div class="line-top">สำนักงานตำรวจแห่งชาติ</div>
+  <h1>
+    เอกสารเพิ่มเติมประกอบการรายงานความเสียหาย<br>
+    ที่เกิดจากสถานการณ์อุทกภัย ของข้าราชการตำรวจในพื้นที่ ภ.๙
+  </h1>
+  <div class="sub-line">หน่วยงาน กก.ปพ. &nbsp;สังกัด บก.สส.ภ.๙</div>
+  <div class="header-rule"></div>
+</div>
+
+<div class="form-wrap">
+<div class="page-wrapper">
+<div class="form-body">
+
+  <!-- Info bar (pre-filled locked) -->
+  <div class="info-bar">
+    <span style="font-size:18px;margin-top:2px;">📌</span>
+    <div class="locked-field">
+      <div class="locked-label">หน่วย กก./สภ.</div>
+      <div class="locked-value"><span class="lock-icon">🔒</span><span id="display-unit1">—</span></div>
+    </div>
+    <div class="locked-field">
+      <div class="locked-label">ยศ – ชื่อ – สกุล</div>
+      <div class="locked-value"><span class="lock-icon">🔒</span><span id="display-name">—</span></div>
+    </div>
+    <div class="locked-field">
+      <div class="locked-label">สังกัด</div>
+      <div class="locked-value"><span class="lock-icon">🔒</span><span id="display-affil">—</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">๑</div>
+      <div class="section-title">สำเนาบัตรประจำตัวประชาชน</div>
+      <span class="section-sub">อัปโหลดหรือถ่ายภาพ</span>
+    </div>
+    <div class="single-upload-box">
+      <label class="photo-upload-area" for="id-card-upload" style="cursor:pointer;">
+        <input type="file" id="id-card-upload" accept="image/*" onchange="previewPhoto(this,'id-card-img')">
+        <div class="upload-placeholder">
+          <span class="upload-icon-big">🪪</span>
+          <div class="upload-hint">คลิกเพื่ออัปโหลดสำเนาบัตรประชาชน (JPG, PNG)</div>
+        </div>
+        <img id="id-card-img" class="photo-preview" alt="สำเนาบัตรประชาชน">
+      </label>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">๒</div>
+      <div class="section-title">สำเนาทะเบียนบ้าน</div>
+      <span class="section-sub">อัปโหลดหรือถ่ายภาพ</span>
+    </div>
+    <div class="single-upload-box">
+      <label class="photo-upload-area" for="house-reg-upload" style="cursor:pointer;">
+        <input type="file" id="house-reg-upload" accept="image/*" onchange="previewPhoto(this,'house-reg-img')">
+        <div class="upload-placeholder">
+          <span class="upload-icon-big">🏠</span>
+          <div class="upload-hint">คลิกเพื่ออัปโหลดสำเนาทะเบียนบ้าน (JPG, PNG)</div>
+        </div>
+        <img id="house-reg-img" class="photo-preview" alt="สำเนาทะเบียนบ้าน">
+      </label>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">๓</div>
+      <div class="section-title">รายงานความเสียหายที่เกิดจากสถานการณ์อุทกภัยของข้าราชการตำรวจ</div>
+    </div>
+
+    <!-- ก) ยศ ชื่อ -->
+    <div class="row-3 field">
+      <div class="field">
+        <label class="lbl">ก) ยศ ชื่อ – สกุล <span class="required">*</span></label>
+        <input type="text" id="out-fullname" readonly placeholder="ดึงจากข้อมูลผู้ดูแล">
+      </div>
+      <div class="field">
+        <label class="lbl">ตำแหน่ง</label>
+        <input type="text" id="out-position" readonly placeholder="—">
+      </div>
+      <div class="field">
+        <label class="lbl">สังกัด</label>
+        <input type="text" id="out-affil-print" readonly placeholder="—">
+      </div>
+    </div>
+
+    <!-- ข) ที่อยู่ -->
+    <div class="field">
+      <label class="lbl">ข) ที่อยู่ที่เกิดอุทกภัย <span class="required">*</span></label>
+      <input type="text" id="address" placeholder="เช่น 123 ถ.เพชรเกษม ต.หาดใหญ่ อ.หาดใหญ่ จ.สงขลา">
+    </div>
+
+    <!-- ค) วันที่ -->
+    <div class="field" style="max-width:300px;">
+      <label class="lbl">ค) วัน เดือน ปี ที่ประสบอุทกภัย <span class="required">*</span></label>
+      <input type="date" id="flood-date">
+    </div>
+
+    <!-- ง+จ) ภาพ + ค่าเสียหาย รวมกัน -->
+    <div class="field" style="margin-top:10px;">
+      <label class="lbl">ง) ภาพถ่ายความเสียหายพร้อมมูลค่าและคำบรรยาย</label>
+      <p class="hint">อัปโหลดภาพถ่ายในแต่ละประเภท กรอกมูลค่าความเสียหาย และเขียนคำบรรยาย — ระบบคำนวณยอดรวมอัตโนมัติ</p>
+
+      <div class="photo-damage-grid">
+
+        <!-- Card 1: บ้าน -->
+        <div class="photo-damage-card">
+          <div class="card-tag">
+            <span>ภาพที่ ๑ — ความเสียหายบ้าน / อาคาร</span>
+            <span class="cat-icon">🏚️</span>
+          </div>
+          <label class="photo-upload-area" for="dmg1" style="cursor:pointer;">
+            <input type="file" id="dmg1" accept="image/*" onchange="previewPhoto(this,'dmg1-img')">
+            <div class="upload-placeholder">
+              <span class="upload-icon-big">📷</span>
+              <div class="upload-hint">คลิกเพื่ออัปโหลดภาพ</div>
+            </div>
+            <img id="dmg1-img" class="photo-preview" alt="บ้าน">
+          </label>
+          <div class="card-amount">
+            <label>มูลค่าความเสียหาย</label>
+            <div class="currency-wrap">
+              <input type="number" id="dmg-house" placeholder="0" min="0" oninput="calcTotal()">
+            </div>
+            <span style="font-size:13px;color:var(--muted);white-space:nowrap;">บาท</span>
+          </div>
+          <div class="card-caption">
+            <span class="cap-label">คำบรรยาย</span>
+            <input type="text" id="cap1" placeholder="เช่น น้ำท่วมห้องนั่งเล่นสูง 1 เมตร พื้นไม้เสียหายทั้งหมด">
+          </div>
+        </div>
+
+        <!-- Card 2: รถ -->
+        <div class="photo-damage-card">
+          <div class="card-tag">
+            <span>ภาพที่ ๒ — ความเสียหายรถยนต์ / จักรยานยนต์</span>
+            <span class="cat-icon">🚗</span>
+          </div>
+          <label class="photo-upload-area" for="dmg2" style="cursor:pointer;">
+            <input type="file" id="dmg2" accept="image/*" onchange="previewPhoto(this,'dmg2-img')">
+            <div class="upload-placeholder">
+              <span class="upload-icon-big">📷</span>
+              <div class="upload-hint">คลิกเพื่ออัปโหลดภาพ</div>
+            </div>
+            <img id="dmg2-img" class="photo-preview" alt="รถ">
+          </label>
+          <div class="card-amount">
+            <label>มูลค่าความเสียหาย</label>
+            <div class="currency-wrap">
+              <input type="number" id="dmg-car" placeholder="0" min="0" oninput="calcTotal()">
+            </div>
+            <span style="font-size:13px;color:var(--muted);white-space:nowrap;">บาท</span>
+          </div>
+          <div class="card-caption">
+            <span class="cap-label">คำบรรยาย</span>
+            <input type="text" id="cap2" placeholder="เช่น รถยนต์โตโยต้า ทะเบียน กข-1234 น้ำท่วมถึงคอนโซล">
+          </div>
+        </div>
+
+        <!-- Card 3: ของใช้ -->
+        <div class="photo-damage-card">
+          <div class="card-tag">
+            <span>ภาพที่ ๓ — เฟอร์นิเจอร์ / เครื่องใช้ไฟฟ้า / เครื่องครัว</span>
+            <span class="cat-icon">📺</span>
+          </div>
+          <label class="photo-upload-area" for="dmg3" style="cursor:pointer;">
+            <input type="file" id="dmg3" accept="image/*" onchange="previewPhoto(this,'dmg3-img')">
+            <div class="upload-placeholder">
+              <span class="upload-icon-big">📷</span>
+              <div class="upload-hint">คลิกเพื่ออัปโหลดภาพ</div>
+            </div>
+            <img id="dmg3-img" class="photo-preview" alt="ของใช้">
+          </label>
+          <div class="card-amount">
+            <label>มูลค่าความเสียหาย</label>
+            <div class="currency-wrap">
+              <input type="number" id="dmg-furniture" placeholder="0" min="0" oninput="calcTotal()">
+            </div>
+            <span style="font-size:13px;color:var(--muted);white-space:nowrap;">บาท</span>
+          </div>
+          <div class="card-caption">
+            <span class="cap-label">คำบรรยาย</span>
+            <input type="text" id="cap3" placeholder="เช่น ตู้เย็น ทีวี และเครื่องซักผ้าเสียหายใช้งานไม่ได้">
+          </div>
+        </div>
+
+        <!-- Card 4: อื่นๆ -->
+        <div class="photo-damage-card">
+          <div class="card-tag">
+            <span>ภาพที่ ๔ — อื่นๆ (การเกษตร / สัตว์เลี้ยง / อุปกรณ์)</span>
+            <span class="cat-icon">🌾</span>
+          </div>
+          <label class="photo-upload-area" for="dmg4" style="cursor:pointer;">
+            <input type="file" id="dmg4" accept="image/*" onchange="previewPhoto(this,'dmg4-img')">
+            <div class="upload-placeholder">
+              <span class="upload-icon-big">📷</span>
+              <div class="upload-hint">คลิกเพื่ออัปโหลดภาพ</div>
+            </div>
+            <img id="dmg4-img" class="photo-preview" alt="อื่นๆ">
+          </label>
+          <div class="card-amount">
+            <label>มูลค่าความเสียหาย</label>
+            <div class="currency-wrap">
+              <input type="number" id="dmg-other" placeholder="0" min="0" oninput="calcTotal()">
+            </div>
+            <span style="font-size:13px;color:var(--muted);white-space:nowrap;">บาท</span>
+          </div>
+          <div class="card-caption">
+            <span class="cap-label">คำบรรยาย</span>
+            <input type="text" id="cap4" placeholder="เช่น พืชผลทางการเกษตร / สัตว์เลี้ยง / อุปกรณ์การเกษตรเสียหาย">
+          </div>
+        </div>
+
+      </div><!-- /photo-damage-grid -->
+
+      <!-- Total bar -->
+      <div class="total-bar">
+        <div class="total-label">💰 รวมมูลค่าความเสียหายทั้งสิ้น</div>
+        <input type="text" id="dmg-total" readonly placeholder="0">
+        <span style="font-size:15px;font-weight:700;">บาท</span>
+      </div>
+
+    </div><!-- /ง -->
+
+  </div><!-- /section 3 -->
+
+  <!-- Buttons -->
+  <div class="btn-row">
+    <button class="btn-print" onclick="window.print()">🖨️ พิมพ์เอกสาร / บันทึกเป็น PDF</button>
+    <button class="btn-clear" onclick="clearForm()">🔄 ล้างข้อมูลที่กรอก (ชื่อ/ยศ/สังกัดยังคงอยู่)</button>
+  </div>
+
+</div><!-- /form-body -->
+</div><!-- /page-wrapper -->
+</div><!-- /form-wrap -->
+
+<script>
+// Pre-fill from URL
+window.addEventListener('DOMContentLoaded', () => {
+  const p = new URLSearchParams(window.location.search);
+  const rank  = p.get('rank') || '';
+  const fname = p.get('fname') || '';
+  const lname = p.get('lname') || '';
+  const pos   = p.get('position') || '';
+  const affil = p.get('affiliation') || '';
+  const unit1 = p.get('unit1') || '';
+  const full  = [rank, fname, lname].filter(Boolean).join(' ');
+
+  document.getElementById('display-unit1').textContent = unit1 || '—';
+  document.getElementById('display-name').textContent  = full  || '—';
+  document.getElementById('display-affil').textContent = affil || '—';
+  document.getElementById('out-fullname').value   = full;
+  document.getElementById('out-position').value   = pos;
+  document.getElementById('out-affil-print').value = affil;
+});
+
+// Photo preview
+function previewPhoto(input, imgId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(imgId);
+    img.src = e.target.result;
+    img.style.display = 'block';
+    const ph = input.closest('.photo-upload-area')?.querySelector('.upload-placeholder');
+    if (ph) ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Auto total
+function calcTotal() {
+  const ids = ['dmg-house','dmg-car','dmg-furniture','dmg-other'];
+  let total = 0;
+  ids.forEach(id => { total += parseFloat(document.getElementById(id).value) || 0; });
+  document.getElementById('dmg-total').value = total.toLocaleString('th-TH') + ' บาท';
+}
+
+// Clear
+function clearForm() {
+  if (!confirm('ล้างข้อมูลที่กรอกทั้งหมดใช่หรือไม่?\n(ชื่อ/ยศ/สังกัดจากผู้ดูแลจะยังคงอยู่)')) return;
+  ['address','flood-date','dmg-house','dmg-car','dmg-furniture','dmg-other','dmg-total',
+   'cap1','cap2','cap3','cap4'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  ['id-card-img','house-reg-img','dmg1-img','dmg2-img','dmg3-img','dmg4-img'].forEach(id => {
+    const img = document.getElementById(id);
+    if(img) { img.src=''; img.style.display='none'; }
+  });
+  document.querySelectorAll('.upload-placeholder').forEach(el => el.style.display='');
+  document.querySelectorAll('input[type="file"]').forEach(el => el.value='');
+}
+</script>
+</body>
+</html>

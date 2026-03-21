@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ผู้ดูแล — เตรียมข้อมูลเจ้าหน้าที่</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #0a1628;
+  --navy2: #102040;
+  --gold: #c8a84b;
+  --gold2: #e8c96a;
+  --red: #8b1a1a;
+  --bg: #f0f2f5;
+  --white: #ffffff;
+  --border: #d0d8e4;
+  --text: #1a202c;
+  --muted: #64748b;
+  --success: #166534;
+  --success-bg: #dcfce7;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Header */
+.top-bar {
+  background: var(--navy);
+  color: white;
+  padding: 0;
+  border-bottom: 3px solid var(--gold);
+}
+
+.top-bar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 30px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.badge {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+
+.top-bar h1 { font-size: 17px; font-weight: 700; line-height: 1.4; }
+.top-bar .role-badge {
+  display: inline-block;
+  background: var(--red);
+  color: white;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+/* Main */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px 60px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--navy);
+  border-left: 4px solid var(--gold);
+  padding-left: 12px;
+  margin-bottom: 20px;
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.step {
+  flex: 1;
+  padding: 14px 16px;
+  background: #f8fafc;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  border-right: 1.5px solid var(--border);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step.active { background: var(--navy); color: white; }
+.step .step-num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+/* Form */
+label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--navy2);
+  margin-bottom: 5px;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10,22,40,0.08);
+}
+
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.row-1 { margin-bottom: 14px; }
+
+.field { margin-bottom: 0; }
+
+/* Generate button */
+.btn-generate {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 24px;
+  letter-spacing: 0.3px;
+  border-bottom: 3px solid var(--gold);
+  transition: opacity 0.2s;
+}
+.btn-generate:hover { opacity: 0.9; }
+
+/* Link output */
+.link-box {
+  display: none;
+  background: var(--success-bg);
+  border: 1.5px solid #86efac;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 20px;
+}
+
+.link-box.show { display: block; }
+
+.link-box h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--success);
+  margin-bottom: 12px;
+}
+
+.link-display {
+  background: white;
+  border: 1.5px solid #86efac;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  word-break: break-all;
+  color: var(--navy);
+  margin-bottom: 12px;
+  font-family: monospace;
+}
+
+.btn-copy {
+  padding: 8px 20px;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-open {
+  padding: 8px 20px;
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Instructions */
+.instructions {
+  background: #fffbeb;
+  border: 1.5px solid #fcd34d;
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+.instructions h3 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 10px;
+}
+.instructions ol {
+  padding-left: 20px;
+  color: #78350f;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="badge">👮</div>
+    <div>
+      <div class="role-badge">🔐 สำหรับผู้ดูแลระบบเท่านั้น</div>
+      <h1>เตรียมข้อมูลเจ้าหน้าที่ — ระบบรายงานความเสียหายอุทกภัย<br>กก.ปพ.บก.สส.ภ.9</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- How it works -->
+  <div class="steps">
+    <div class="step active"><span class="step-num">1</span>ผู้ดูแลกรอกชื่อ/ยศ</div>
+    <div class="step active"><span class="step-num">2</span>สร้าง Link</div>
+    <div class="step"><span class="step-num">3</span>ส่ง Link ให้เจ้าหน้าที่</div>
+    <div class="step"><span class="step-num">4</span>เจ้าหน้าที่กรอกและพิมพ์</div>
+  </div>
+
+  <!-- Form -->
+  <div class="card">
+    <div class="card-title">📋 ใส่ข้อมูลพื้นฐานของเจ้าหน้าที่</div>
+
+    <div class="row-3">
+      <div class="field">
+        <label>ยศ</label>
+        <select id="rank">
+          <option value="">-- เลือกยศ --</option>
+          <option>พล.ต.อ.</option>
+          <option>พล.ต.ท.</option>
+          <option>พล.ต.ต.</option>
+          <option>พ.ต.อ.</option>
+          <option>พ.ต.ท.</option>
+          <option>พ.ต.ต.</option>
+          <option>ร.ต.อ.</option>
+          <option>ร.ต.ท.</option>
+          <option>ร.ต.ต.</option>
+          <option>ด.ต.</option>
+          <option>จ.ส.ต.</option>
+          <option>ส.ต.อ.</option>
+          <option>ส.ต.ท.</option>
+          <option>ส.ต.ต.</option>
+          <option>พ.ต.ท.</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>ชื่อ</label>
+        <input type="text" id="fname" placeholder="ชื่อ">
+      </div>
+      <div class="field">
+        <label>สกุล</label>
+        <input type="text" id="lname" placeholder="นามสกุล">
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>ตำแหน่ง</label>
+        <input type="text" id="position" placeholder="เช่น รอง สว., สว., ผกก.">
+      </div>
+      <div class="field">
+        <label>สังกัด</label>
+        <input type="text" id="affiliation" placeholder="เช่น กก.ปพ.บก.สส.ภ.9">
+      </div>
+    </div>
+
+    <div class="row-1">
+      <label>หน่วย กก./สภ.</label>
+      <input type="text" id="unit1" placeholder="กรอกหน่วย">
+      <p class="hint">ข้อมูลส่วนนี้จะถูกล็อคไว้ เจ้าหน้าที่แก้ไขไม่ได้</p>
+    </div>
+
+    <button class="btn-generate" onclick="generateLink()">🔗 สร้าง Link สำหรับเจ้าหน้าที่</button>
+
+    <!-- Result -->
+    <div class="link-box" id="link-box">
+      <h3>✅ Link พร้อมแล้ว — ส่งให้เจ้าหน้าที่ได้เลย!</h3>
+      <div class="link-display" id="link-display">—</div>
+      <button class="btn-copy" onclick="copyLink()">📋 คัดลอก Link</button>
+      <button class="btn-open" onclick="openForm()">🔗 เปิดแบบฟอร์ม</button>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <h3>📌 วิธีใช้งานสำหรับผู้ดูแล (Admin)</h3>
+    <ol>
+      <li>กรอก <strong>ยศ ชื่อ สกุล ตำแหน่ง สังกัด</strong> ของเจ้าหน้าที่แต่ละคน</li>
+      <li>กด <strong>"สร้าง Link"</strong> จะได้ Link เฉพาะของเจ้าหน้าที่คนนั้น</li>
+      <li>ส่ง Link ผ่าน <strong>LINE / WhatsApp / SMS</strong> ให้เจ้าหน้าที่</li>
+      <li>เจ้าหน้าที่เปิด Link → กรอกข้อมูลส่วนที่เหลือ → กดพิมพ์เป็น PDF</li>
+      <li>ทำซ้ำสำหรับแต่ละคน (ไม่ต้องติดตั้งโปรแกรม)</li>
+    </ol>
+  </div>
+
+</div>
+
+<script>
+let generatedUrl = '';
+
+function generateLink() {
+  const rank = document.getElementById('rank').value;
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const position = document.getElementById('position').value.trim();
+  const affiliation = document.getElementById('affiliation').value.trim();
+  const unit1 = document.getElementById('unit1').value.trim();
+
+  if (!rank || !fname || !lname) {
+    alert('กรุณากรอก ยศ ชื่อ และสกุล ก่อนสร้าง Link');
+    return;
+  }
+
+  // Build params
+  const params = new URLSearchParams({
+    rank, fname, lname, position, affiliation, unit1
+  });
+
+  // The form file is in same folder
+  const base = window.location.href.replace('admin-setup.html', 'แบบฟอร์มอุทกภัยตำรวจ_v2.html');
+  generatedUrl = base + '?' + params.toString();
+
+  document.getElementById('link-display').textContent = generatedUrl;
+  document.getElementById('link-box').classList.add('show');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(generatedUrl).then(() => {
+    alert('คัดลอก Link แล้ว!');
+  });
+}
+
+function openForm() {
+  window.open(generatedUrl, '_blank');
+}
+</script>
+</body>
+</html>
